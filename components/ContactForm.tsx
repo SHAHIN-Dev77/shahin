@@ -1,80 +1,92 @@
 "use client"
 
 import { useState } from "react"
-import ReCAPTCHA from "react-google-recaptcha"
-
-const CONTACT_FORM_SECRET = "MySuperSecretKey123" // same as backend
 
 export default function ContactForm() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [message, setMessage] = useState("")
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
-  const [status, setStatus] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [status, setStatus] = useState<string | null>(null)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!captchaToken) {
-      setStatus("Please complete the CAPTCHA ✅")
-      return
-    }
+    setLoading(true)
+    setStatus(null)
 
-    setStatus("Sending...")
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, message }),
+      })
 
-    const res = await fetch("/api/contact", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-secret-key": CONTACT_FORM_SECRET,
-      },
-      body: JSON.stringify({ name, email, message, token: captchaToken }),
-    })
+      const data = await res.json()
 
-    const data = await res.json()
+      if (!res.ok) {
+        setStatus(data.error || "Something went wrong")
+        return
+      }
 
-    if (res.ok) {
       setStatus("Message sent successfully ✅")
       setName("")
       setEmail("")
       setMessage("")
-      setCaptchaToken(null)
-    } else {
-      setStatus(data.error || "Something went wrong ❌")
+    } catch (err) {
+      setStatus("Network error")
+    } finally {
+      setLoading(false)
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-lg mx-auto space-y-4"
+    >
+      <h2 className="text-2xl font-bold">Contact Me</h2>
+
       <input
-        className="w-full border p-2"
-        placeholder="Name"
+        className="w-full border p-2 rounded"
+        placeholder="Your name"
         value={name}
         onChange={(e) => setName(e.target.value)}
         required
       />
+
       <input
-        className="w-full border p-2"
-        placeholder="Email"
+        className="w-full border p-2 rounded"
         type="email"
+        placeholder="Your email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         required
       />
+
       <textarea
-        className="w-full border p-2"
-        placeholder="Message"
+        className="w-full border p-2 rounded"
+        placeholder="Your message"
+        rows={5}
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         required
       />
-      <ReCAPTCHA
-        sitekey="6LcycUQsAAAAAJJoBIEuL7mF4X8w501zLtYWn1s-"
-        onChange={(token) => setCaptchaToken(token)}
-      />
-      <button type="submit" className="bg-black text-white px-4 py-2">
-        Send
+
+      <button
+        type="submit"
+        disabled={loading}
+        className="bg-black text-white px-6 py-2 rounded disabled:opacity-50"
+      >
+        {loading ? "Sending..." : "Send Message"}
       </button>
-      {status && <p>{status}</p>}
+
+      {status && (
+        <p className="text-sm mt-2">
+          {status}
+        </p>
+      )}
     </form>
   )
 }
