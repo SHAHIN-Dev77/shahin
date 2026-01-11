@@ -53,7 +53,7 @@ export default function Home(): JSX.Element {
 
           <ProjectCard
             title="Future SaaS App"
-            description="A planned SaaS product with authentication and dashboard."
+            description="A planned SaaS product with authentication and dashboard and admin panel."
             tech={["Next.js", "MongoDB", "Node.js"]}
           />
         </div>

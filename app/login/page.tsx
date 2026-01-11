@@ -16,12 +16,13 @@ export default function LoginPage() {
     });
 
     if (res.ok) router.push("/");
-    else alert("Login failed");
+    else alert("email or password is incorrect");
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-200">
-      <div className="w-full max-w-sm bg-cyan-400 p-10 rounded-lg shadow-lg">
+    <div className=" flex  items-center justify-center">
+      <div className="max-w-md p-2 justify-center bg-gray-600 rounded-2xl ">
+      <div className="w-full max-w-sm  bg-cyan-400 p-10 rounded-lg shadow-lg flex flex-col items-center">
         <h1 className="text-center text-xl font-bold mb-4">Login</h1>
 
         <input
@@ -38,12 +39,14 @@ export default function LoginPage() {
         />
 
         <button
-          className="bg-cyan-400 text-black w-full py-2 rounded"
+          className="bg-gray-400 text-black p-4 py-2 rounded font-bold hover:bg-gray-300"
           onClick={login}
         >
           Login
         </button>
       </div>
     </div>
+    </div>
+    
   );
 }
