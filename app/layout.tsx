@@ -8,7 +8,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en">
       <body className="min-h-screen flex flex-col">
         <Navbar />
-        <main className="min-h-screen items-center justify-center px-6 py-12 bg-cyan-50">
+        <main className="min-h-screen items-center justify-center px-6 py-12 bg-cyan-50 text-black">
           {children}
         </main>
         <Footer />
