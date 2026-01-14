@@ -12,6 +12,7 @@ export default function Navbar(): JSX.Element {
           <Link href="/about" className="hover:text-blue-600">About</Link>
           <Link href="/login" className="hover:text-blue-600">Login</Link>
           <Link href="/signup" className="hover:text-blue-600">SignUp</Link>
+          <Link href="/request" className="hover:text-blue-600">Request</Link>
         </div>
       </div>
     </nav>

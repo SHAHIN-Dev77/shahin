@@ -1,7 +1,6 @@
 'use client';
-
-import { useSearchParams } from 'next/navigation'; // For accessing the query parameters
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 // Define the Q&A data type
 type QnAData = {
@@ -11,32 +10,43 @@ type QnAData = {
 
 const QAPage = () => {
   const searchParams = useSearchParams();
-  const area = searchParams.get('area'); // Get the selected area from the query parameter
+  const category = searchParams.get('category') || ''; // Simulating the selected category (replace with actual logic)
   const [questions, setQuestions] = useState<QnAData[]>([]);
 
-  // Fetch relevant questions based on the selected area
-  useEffect(() => {
-    if (area === 'Dhaka') {
+  // Fetch relevant questions based on the selected category
+  const loadQuestions = (category: string) => {
+    if (category === 'AC') {
       setQuestions([
-        { question: 'What type of service do you need?', options: ['Plumbing', 'Cleaning', 'Electrical'] },
-        { question: 'Do you need installation or repair service?', options: ['Installation', 'Repair'] },
+        { question: 'What type of AC do you have?', options: ['Split', 'Window'] },
+        { question: 'Do you need repair or installation?', options: ['Repair', 'Installation'] },
       ]);
-    } else if (area === 'Chittagong') {
+    } else if (category === 'Washing Machine') {
       setQuestions([
-        { question: 'What type of electrical service do you need?', options: ['Wiring', 'Installation', 'Repair'] },
+        { question: 'What type of washing machine is it?', options: ['Front Load', 'Top Load'] },
+        { question: 'Do you need repair or installation?', options: ['Repair', 'Installation'] },
       ]);
-    } else {
-      // Default questions for other areas
+    } else if (category === 'Plumbing') {
       setQuestions([
-        { question: 'What type of service do you need?', options: ['Plumbing', 'Cleaning', 'Electrical'] },
+        { question: 'What plumbing service do you need?', options: ['Pipe Repair', 'Installation'] },
+        { question: 'Do you need assistance with drainage?', options: ['Yes', 'No'] },
+      ]);
+    } else if (category === 'Cleaning') {
+      setQuestions([
+        { question: 'What cleaning service do you need?', options: ['House Cleaning', 'Office Cleaning'] },
+        { question: 'Do you need deep cleaning?', options: ['Yes', 'No'] },
       ]);
     }
-  }, [area]);
+  };
+
+  // Load questions based on the selected category (you should replace with real logic to fetch the category)
+  useEffect(() => {
+    loadQuestions(category);
+  }, [category]);
 
   return (
     <div className="max-w-md mx-auto p-4 bg-white shadow-md rounded">
       <h1 className="text-xl font-bold mb-4">Service Details</h1>
-      <p className="mb-4">Please answer the following questions based on your selected service area: {area}</p>
+      <p className="mb-4">Please answer the following questions based on your selected service:</p>
 
       <form>
         {questions.map((q, index) => (
@@ -59,3 +69,4 @@ const QAPage = () => {
 };
 
 export default QAPage;
+

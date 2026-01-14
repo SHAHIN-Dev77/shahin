@@ -1,6 +1,8 @@
 'use client'; // Ensures the component runs only on the client-side
-import { useForm } from 'react-hook-form';
-import { useState, useEffect } from 'react';
+
+import { useEffect } from 'react';
+import { useForm, UseFormSetValue } from 'react-hook-form';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation'; // Using Next.js's `useRouter` to handle routing
 
 // Define the form data type
@@ -9,6 +11,7 @@ type RequestFormData = {
   email: string;
   phone: string;
   area: string;
+  category: string;
 };
 
 const RequestForm = () => {
@@ -34,7 +37,7 @@ const RequestForm = () => {
   const onSubmit = (data: RequestFormData) => {
     console.log(data);
     // After clicking Next, route to the next page for the Q&A
-    router.push(`/qa?area=${encodeURIComponent(data.area)}`);
+    router.push(`/qa?category=${encodeURIComponent(data.category)}`);
   };
 
   return (
@@ -90,6 +93,22 @@ const RequestForm = () => {
         </select>
       </div>
 
+            <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700">Select Service</label>
+        <select
+          {...register('category', { required: true })}
+          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+        >
+          <option value="">Select a service</option>
+          <option value="AC">AC</option>
+          <option value="Refrigerator">Refrigerator</option>
+          <option value="Washing Machine">Washing Machine</option>
+          <option value="Microwave">Microwave</option>
+          <option value="Other">Other</option>
+          {/* Add more services as needed */}
+        </select>
+      </div>
+
       <button
         type="submit"
         className="w-full py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
@@ -101,3 +120,4 @@ const RequestForm = () => {
 };
 
 export default RequestForm;
+

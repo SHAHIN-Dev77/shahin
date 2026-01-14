@@ -15,8 +15,9 @@ export default function LoginPage() {
       body: JSON.stringify({ email, password }),
     });
 
-    if (res.ok) router.push("/");
+    if (res.ok) router.push("/dashboard");
     else alert("email or password is incorrect");
+
   }
 
   return (
